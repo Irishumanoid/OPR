@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import frc.data.type.Match;
+
+import frc.OPRContent.Match;
+
+
 // placeholder class, will probably be refactored
 public class DataIO {
    public static void writeMatchData(ArrayList<Match> matches, String filepath) {
@@ -26,6 +29,7 @@ public class DataIO {
       ArrayList<Match> out = new ArrayList<>();
       try {
          FileInputStream fileIn = new FileInputStream(filepath);
+         
          ObjectInputStream in = new ObjectInputStream(fileIn);
          out = (ArrayList<Match>) in.readObject();
          in.close();
