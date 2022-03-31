@@ -1,4 +1,4 @@
-package frc.data.output;
+package frc.data;
 
 public class CSVFormat {
     public int teamNumber;
