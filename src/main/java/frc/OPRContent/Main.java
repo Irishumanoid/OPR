@@ -18,8 +18,9 @@ public final class Main {
   public static void main(String[] args) throws IOException {
     CSVofOPRs csv = new CSVofOPRs();
     System.out.println(csv); //gets file of team numbers, oprs, win percentages
+    /*
     File csv = new File(System.getProperty("C:\\Windows\\Downloads"));
     OutputStream out = new FileOutputStream(csv);
-    out.close();
+    out.close();*/
   }
 }
