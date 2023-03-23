@@ -20,7 +20,7 @@ public class DataIO {
          out.writeObject(matches);
          out.close();
          fileOut.close();
-         System.out.printf("Serialized data is saved in " + filepath);
+         System.out.printf(filepath);
       } catch (IOException i) {
          i.printStackTrace();
       }
@@ -44,6 +44,7 @@ public class DataIO {
       }
       return out;
    }
+
 }
 
 

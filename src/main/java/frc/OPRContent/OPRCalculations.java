@@ -18,10 +18,23 @@ the former is recommended for large datasets, use MMSE for smaller datasets
 public class OPRCalculations{
     private static OPRProcessing processing = new OPRProcessing();
     private static OPRList oprList = new OPRList();
+    
+    private static int teamsPerAlliance;
+    private static int[][][] playingTeams;
+    private static int[] teamList;
+    private static int[][] scores;
+
+
+    public static void populate() {
+        teamsPerAlliance = 3;
+        playingTeams = getPlayingTeams();
+        teamList = getTeams();
+        scores = getTeamScores(teamsPerAlliance, teamList);
+    }
 
     //populates playingTeams[match index][red=0 or blue=1][team in alliance], team numbers (reads from oprList)
-    public static int[][][] getPlayingTeams(int teamsPerAlliance) {
-        int[][][] playingTeams = new int[processing.getMatchListSize()][2][teamsPerAlliance];
+    public static int[][][] getPlayingTeams() {
+        playingTeams = new int[processing.getMatchListSize()][2][teamsPerAlliance];
         //List<Match> matchesList = processing.getMatchList();
         for (int i = 0; i < processing.getMatchListSize(); i++) { 
             for (int k = 0; k < teamsPerAlliance; k++) {
@@ -33,7 +46,7 @@ public class OPRCalculations{
     }
 
     //populates teamList[team number]
-    public static int[] getTeams(int teamsPerAlliance, int[][][] playingTeams) {
+    public static int[] getTeams() {
         Set<Integer> sortedTeams = new TreeSet<>();
         for(int i = 0; i < playingTeams.length; i++) {
             for(int j = 0; j < teamsPerAlliance; j++) { //usually 3 teams
@@ -41,7 +54,7 @@ public class OPRCalculations{
                 sortedTeams.add(playingTeams[i][1][j]); //blue alliance in 1st
             }
         }
-        int[] teamList = new int[playingTeams.length];
+        teamList = new int[playingTeams.length];
         Iterator<Integer> teamHashSet = sortedTeams.iterator();
         int i = 0;
         while (teamHashSet.hasNext()) {
@@ -53,7 +66,7 @@ public class OPRCalculations{
     //populates scores[#match points][red=0 or blue=1]  (reads from oprList based off teamList ordering)
     //score will be repeated each time per team
     public static int[][] getTeamScores(int teamsPerAlliance, int[] teamList) {
-        int[][] scores = new int[processing.matches.size()*3][2];
+        scores = new int[processing.matches.size()*3][2];
         //Iterator<Integer> teamListSet = teamList.iterator(); 
         int teamSize = teamList.length;
         while (teamSize >= 0) {
@@ -89,7 +102,7 @@ public class OPRCalculations{
     }
 
    //teamList[team number], scores[#match points][red=0 or blue=1], playingTeams[match index][red=0 or blue=1][#teams per alliance]
-    public static double[] computeOPRwithMMSE(int[] teamList, int teamsPerAlliance, int[][][] playingTeams, int[][] scores) {
+    public static double[] computeOPRwithMMSE() {
         List<Integer> TeamList = new ArrayList<>();
         int numTeams = teamList.length;
         for (int i = 0; i < numTeams; i++) {
@@ -191,8 +204,8 @@ public class OPRCalculations{
     }
 
     //with Chloesky Decomposition (implemented in mmse method)
-    public static double[] computeOPRwithChloesky(double mmse, int[] teamList, int teamsPerAlliance, int[][][] playingTeams, int[][] scores, double averageTeamOffenseScore, int numScoredMatches, int numTeams, Matrix Ao, Matrix Mo) {
-        computeOPRwithMMSE(teamList, teamsPerAlliance, playingTeams, scores);
+    public static double[] computeOPRwithChloesky(double mmse, double averageTeamOffenseScore, int numScoredMatches, int numTeams, Matrix Ao, Matrix Mo) {
+        computeOPRwithMMSE();
         Matrix AoNew = getTriangular(Ao, 2*numScoredMatches, numTeams);
         Matrix AoMatrixInverseNew;
         try {
@@ -209,7 +222,9 @@ public class OPRCalculations{
         return opr;
     }
 
-    public static double[] getData(int[] teamList, int teamsPerAlliance, int[][][] playingTeams, int scores[][], int[] opr) {
-        return computeOPRwithMMSE(teamList, teamsPerAlliance, playingTeams, scores);
+    public static double[] getData() {
+        populate();
+        return computeOPRwithMMSE();
+        
     }
 }

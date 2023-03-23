@@ -23,8 +23,8 @@ public class CSVofOPRs {
     public static FileWriter getCSVofOPRs(int[] teamList, double[] oprs, double[] winPercentage) {
         Set<Double> opr = new TreeSet<>();
         Set<Double> percentage = new TreeSet<>();
-        teamList = OPRCalculations.getTeams(3, OPRCalculations.getPlayingTeams(3));
-        int[][][] playingTeams = OPRCalculations.getPlayingTeams(3);
+        teamList = OPRCalculations.getTeams();
+        int[][][] playingTeams = OPRCalculations.getPlayingTeams();
         int[][] scores = OPRCalculations.getTeamScores(3, teamList);
 
         double[] oprList = new double[teamList.length];
@@ -34,7 +34,7 @@ public class CSVofOPRs {
         int j = 0;
 
         for (int i = 0; i < teamList.length; i++) {
-            for (double e : OPRCalculations.computeOPRwithMMSE(teamList, 3, playingTeams, scores)) {
+            for (double e : OPRCalculations.computeOPRwithMMSE()) {
                 opr.add(e);
             }
 

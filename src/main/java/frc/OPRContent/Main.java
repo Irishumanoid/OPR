@@ -11,8 +11,13 @@ public final class Main {
 
 
   public static void main(String[] args) throws IOException {
-    CSVofOPRs csv = new CSVofOPRs();
-    System.out.println(csv); //gets file of team numbers, oprs, win percentages
+    //CSVofOPRs csv = new CSVofOPRs();
+
+    
+    System.out.println(OPRCalculations.getData());
+
+    //System.out.println(csv);
+
     /*
     File csv = new File(System.getProperty("C:\\Windows\\Downloads"));
     OutputStream out = new FileOutputStream(csv);
